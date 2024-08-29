@@ -1,10 +1,20 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 const Tasks = () => {
     const[task, setTask] = useState('');
     const[list,setList] = useState([]);
 
     const host = "https://playground.4geeks.com/todo";
+
+    useEffect(() => {
+        const fetchTasks = async () => {
+            const response = await fetch(host);
+            const data = await response.json();
+            setList(data);
+        };
+
+        fetchTasks();
+    }, []);
 
     const handleAddTask = () => {
         if(task.trim() !== ''){
@@ -13,7 +23,7 @@ const Tasks = () => {
         }
     }
 
-    const handleRemoveTask = () => {
+    const handleRemoveTask = (index) => {
         const newList = [...list];
         newList.splice(index, 1);
         setList(newList);
@@ -33,6 +43,7 @@ const Tasks = () => {
                 {list.map((item, index) => (
                     <li key={index}>
                         {item}
+                        <button onClick={() => {handleRemoveTask(index)}}>X</button>
                     </li>
                 ))}
             </ul>
