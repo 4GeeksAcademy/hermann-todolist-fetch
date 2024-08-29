@@ -4,7 +4,7 @@ const Tasks = () => {
     const [task, setTask] = useState('');
     const [list, setList] = useState([]);
 
-    const host = "https://playground.4geeks.com/todo";
+    const host = "https://playground.4geeks.com/todo/users/hermannjames";
 
     // Función para cargar las tareas desde la API cuando la lista se carga por primera vez
     useEffect(() => {
@@ -12,7 +12,7 @@ const Tasks = () => {
             try {
                 const response = await fetch(host);
                 const data = await response.json();
-                setList(data);
+                setList(data.todos || []); // Asumiendo que "todos" es el array que contiene las tareas
             } catch (error) {
                 console.error("Error fetching tasks:", error);
             }
@@ -29,7 +29,7 @@ const Tasks = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(updatedList),
+                body: JSON.stringify({ todos: updatedList }),
             });
             setList(updatedList);
         } catch (error) {
@@ -40,10 +40,18 @@ const Tasks = () => {
     // Función para agregar una nueva tarea
     const handleAddTask = () => {
         if (task.trim() !== '') {
-            const updatedList = [...list, task];
+            const updatedList = [...list, { label: task, is_done: false }];
             syncTasksWithServer(updatedList);
             setTask(''); // Limpia el input después de agregar la tarea
         }
+    };
+
+    // Función para marcar una tarea como completada o pendiente
+    const toggleTaskCompletion = (index) => {
+        const updatedList = list.map((item, i) => 
+            i === index ? { ...item, is_done: !item.is_done } : item
+        );
+        syncTasksWithServer(updatedList);
     };
 
     // Función para eliminar una tarea
@@ -77,7 +85,12 @@ const Tasks = () => {
             <ul>
                 {list.map((item, index) => (
                     <li key={index}>
-                        {item}
+                        <input
+                            type="checkbox"
+                            checked={item.is_done}
+                            onChange={() => toggleTaskCompletion(index)}
+                        />
+                        {item.label}
                         <button onClick={() => handleRemoveTask(index)}>X</button>
                     </li>
                 ))}

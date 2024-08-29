@@ -1,5 +1,5 @@
 import React from "react";
-import Tasks from "./tasks.jsx";
+import AddTodo from "./tasks.jsx";
 
 //include images into your bundle
 import rigoImage from "../../img/rigo-baby.jpg";
@@ -8,7 +8,7 @@ import rigoImage from "../../img/rigo-baby.jpg";
 const Home = () => {
 	return (
 		<div className="app">
-			<Tasks />
+			<AddTodo />
 		</div>
 	);
 };
