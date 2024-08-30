@@ -24,47 +24,41 @@ export const TaskList = () => {
   
     getData();
   }, []);
-  
+
   const addTask = async (newTaskLabel) => {
+    const uri = base_url + '/todos/hermannjames';
     const dataToSend = {
       label: newTaskLabel,
       is_done: false
     };
-
     const options = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(dataToSend)
-    };
-
-    try {
-      const response = await fetch(addTaskUrl, options);
-      if (!response.ok) {
-        console.error('Error: ', response.status, response.statusText);
-        return { error: { status: response.status, statusText: response.statusText } };
-      }
-
-      const newTask = await response.json();
-      return newTask;
-    } catch (error) {
-      console.error('Fetch error: ', error);
-      return { error };
     }
-  };
+
+    const response = await fetch(uri, options);
+    if (!response.ok) {
+      console.error('Error: ', response.status, response.statusText);
+      return { error: { status: response.status, statusText: response.statusText } };
+    }
+    const newTask = await response.json();
+    return newTask;
+
+  }
 
   const handleAddTask = async () => {
     if (task.trim() !== '') {
       const newTask = await addTask(task);
-      if (newTask && !newTask.error) {
-        setList([...list, newTask]);
-        setTask('');
-      }
+      setList([...list, newTask]);
+      setTask('');
     }
   };
 
-  const deleteTask = async (id) => {
+  const deleteTask = async (id) =>{
+    const uri = base_url + '/todos'
     const options = {
       method: 'DELETE',
       headers: {
@@ -72,18 +66,12 @@ export const TaskList = () => {
       }
     };
 
-    try {
-      const response = await fetch(`${deleteHost}/${id}`, options);
-      if (!response.ok) {
-        console.error('Error: ', response.status, response.statusText);
-        return { error: { status: response.status, statusText: response.statusText } };
-      }
-      return true;
-    } catch (error) {
-      console.error('Fetch error: ', error);
-      return { error };
+    const response = await fetch(`${uri}/${id}`, options);
+    if (!response.ok) {
+      console.error('Error: ', response.status, response.statusText);
+      return { error: { status: response.status, statusText: response.statusText } };
     }
-  };
+  }
 
   const handleRemoveTask = async (index) => {
     const taskToRemove = list[index];
