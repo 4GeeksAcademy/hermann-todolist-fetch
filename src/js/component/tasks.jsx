@@ -5,29 +5,26 @@ export const TaskList = () => {
   const [list, setList] = useState([]);
 
   const host = "https://playground.4geeks.com/todo/users/hermannjames";
-  const addTaskUrl = "https://playground.4geeks.com/todo/todos/hermannjames"; // URL para añadir nuevas tareas
-  const deleteHost = "https://playground.4geeks.com/todo/todos"; // URL base para eliminar tareas por ID
+  const base_url = "https://playground.4geeks.com/todo";
+  const addTaskUrl = "https://playground.4geeks.com/todo/todos/hermannjames";
+  const deleteHost = "https://playground.4geeks.com/todo/todos";
 
-  // Cargar las tareas cuando el componente se monta
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(host);
-        if (!response.ok) {
-          console.error('Error fetching data: ', response.status, response.statusText);
-          return;
-        }
-
-        const data = await response.json();
-        setList(data.todos);
-      } catch (error) {
-        console.error('Fetch error: ', error);
+    const getData = async () => {
+      const uri = base_url + '/users/hermannjames';
+      const response = await fetch(uri);
+      if (!response.ok) {
+        console.log('error: ', response.status, response.statusText);
+        return {error: {status: response.status, statusText: response.statusText}};
       }
-    };
-
-    fetchData();
-  }, []); // Se ejecuta solo una vez, al montar el componente
-
+  
+      const data = await response.json();
+      setList(data.todos);
+    }
+  
+    getData();
+  }, []);
+  
   const addTask = async (newTaskLabel) => {
     const dataToSend = {
       label: newTaskLabel,
