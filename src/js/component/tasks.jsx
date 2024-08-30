@@ -45,7 +45,9 @@ export const TaskList = () => {
       return { error: { status: response.status, statusText: response.statusText } };
     }
     const newTask = await response.json();
-    return newTask;
+    setList([...list, newTask]);
+    setTask('');
+    getData();
 
   }
 

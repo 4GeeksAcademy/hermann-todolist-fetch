@@ -1,5 +1,6 @@
 import React from "react";
-import {TaskList} from "./tasks.jsx";
+// import {TaskList} from "./tasks.jsx";
+import TodoList from './newtasks.jsx';
 
 //include images into your bundle
 import rigoImage from "../../img/rigo-baby.jpg";
@@ -8,7 +9,7 @@ import rigoImage from "../../img/rigo-baby.jpg";
 const Home = () => {
 	return (
 		<div className="app">
-			<TaskList />
+			<TodoList />
 		</div>
 	);
 };
