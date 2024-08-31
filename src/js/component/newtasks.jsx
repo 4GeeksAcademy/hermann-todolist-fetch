@@ -50,17 +50,18 @@ const TodoList = () => {
 
     // Metodo 'DELETE'
     const removeTask = async (id) => {
-        const uri = host + '/todos/';
+        const uri = host + '/todos';
         const options = {
             method: 'DELETE'
         }
 
-        const response = await fetch(`${uri}${id}`, options);
+        const response = await fetch(`${uri}/${id}`, options);
         if(!response.ok){
             console.log(response.status);
             return;
         }
-        const data = response.json();
+        const data = await response.json();
+
         getTasks();
 
     }
@@ -86,10 +87,10 @@ const TodoList = () => {
                 onKeyDown={handleKeyPress}
             />
             <ul>
-                {list.map((item, index) => (
+                {list.map((item) => (
                 <li key={item.id}>
                     {item.label}
-                    <button onClick={() => { removeTask(index) }}>X</button>
+                    <button onClick={() => {removeTask(item.id)}}>X</button>
                 </li>
                 ))}
             </ul>
