@@ -23,10 +23,10 @@ const TodoList = () => {
     }
 
     // Metodo 'POST'
-    const addTask = async (newTask) => {
+    const addTask = async () => {
         const uri = host + '/todos/hermannjames';
         const dataToSend = {
-            label: newTask,
+            label: `${task}`,
             is_done: false
         }
         const options = {
@@ -44,9 +44,10 @@ const TodoList = () => {
         }
         const data = await response.json();
         
-        getTasks();
+        getTasks()
         setTask('');
     }
+
     // Metodo 'DELETE'
     const removeTask = async (id) => {
         const uri = host + '/todos/';
@@ -65,11 +66,11 @@ const TodoList = () => {
     }
 
     useEffect(() => {
-        getTasks();
+        getTasks()
     }, []);
 
     const handleKeyPress = (e) => {
-        if(e.key === 'Enter'){
+        if(e.key == 'Enter'){
             addTask();
         }
     }
