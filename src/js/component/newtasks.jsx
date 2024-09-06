@@ -1,9 +1,10 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 
 const TodoList = () => {
-    const[task, setTask] = useState('');
-    const[list, setList] = useState([]);
+    const [task, setTask] = useState('');
+    const [list, setList] = useState([]);
     const host = "https://playground.4geeks.com/todo";
+    const user = "hermannjames"
 
     // Metodo 'GET'
     const getTasks = async () => {
@@ -14,8 +15,8 @@ const TodoList = () => {
         }
 
         const response = await fetch(uri, options);
-        if(!response.ok){
-            console.log(response.status);
+        if (!response.ok) {
+            createUser()
             return;
         }
         const data = await response.json();
@@ -38,12 +39,12 @@ const TodoList = () => {
         }
 
         const response = await fetch(uri, options);
-        if(!response.ok){
+        if (!response.ok) {
             console.log(response.status);
             return;
         }
         const data = await response.json();
-        
+
         getTasks()
         setTask('');
     }
@@ -56,11 +57,11 @@ const TodoList = () => {
         }
 
         const response = await fetch(`${uri}/${id}`, options);
-        if(!response.ok){
+        if (!response.ok) {
             console.log(response.status);
             return;
         }
-        
+
         // const data = await response.json();
 
         setList(list.filter(item => item.id !== id));
@@ -68,12 +69,24 @@ const TodoList = () => {
 
     }
 
+    const createUser = async () => {
+        const uri = `${host}/users/${user}`
+        const options = {
+            method: 'POST'
+        }
+        const response = await fetch(uri, options)
+
+        if (!response.ok) return console.log(response.status)
+
+        getTasks()
+    }
+
     useEffect(() => {
         getTasks()
     }, []);
 
     const handleKeyPress = (e) => {
-        if(e.key == 'Enter'){
+        if (e.key == 'Enter') {
             addTask();
         }
     }
@@ -90,10 +103,10 @@ const TodoList = () => {
             />
             <ul>
                 {list.map((item) => (
-                <li key={item.id}>
-                    {item.label}
-                    <button onClick={() => {removeTask(item.id)}}>X</button>
-                </li>
+                    <li key={item.id}>
+                        {item.label}
+                        <button onClick={() => { removeTask(item.id) }}>X</button>
+                    </li>
                 ))}
             </ul>
             <p className="taskCount">
